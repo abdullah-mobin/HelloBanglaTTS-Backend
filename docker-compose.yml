@@ -1,0 +1,33 @@
+services:
+  mongodb:
+    image: mongo:7
+    container_name: hello-bangla-tts-mongodb
+    ports:
+      - "27019:27017" # Host:Container
+    volumes:
+      - hello_bangla_tts_data:/data/db
+    entrypoint: ["bash", "-c", "mongod --bind_ip_all --port 27017"]
+    restart: unless-stopped
+    networks:
+      - hello-bangla-tts-network
+
+  app:
+    image: abdullahmobin/hello_bangla_tts_backend:latest
+    container_name: hello-bangla-tts-backend
+    depends_on:
+      mongodb:
+        condition: service_started
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    env_file:
+      - .env
+    networks:
+      - hello-bangla-tts-network
+
+volumes:
+  hello_bangla_tts_data:
+
+networks:
+  hello-bangla-tts-network:
+    driver: bridge

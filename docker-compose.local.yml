@@ -1,0 +1,13 @@
+services:
+  mongodb:
+    image: mongo:7
+    container_name: hello-bangla-tts-mongodb-local
+    ports:
+      - "27017:27017" # Host:Container
+    volumes:
+      - hello_bangla_tts_data:/data/db
+    entrypoint: ["bash", "-c", "mongod --bind_ip_all --port 27017"]
+    restart: unless-stopped
+
+volumes:
+  hello_bangla_tts_data:
