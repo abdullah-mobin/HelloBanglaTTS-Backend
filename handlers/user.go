@@ -119,6 +119,14 @@ func RegisterNewUser(c *fiber.Ctx) error {
 		return response.ValidationException(c, "Invalid request", errorsArr)
 	}
 
+	credentialRepo := repository.NewCredentialRepository()
+	isAvailable, err := credentialRepo.IsEmailAvailable(context.Background(), self.Email)
+	if err != nil {
+		return response.InternalServerErrorException(c, "Failed to check email availability", err.Error())
+	}
+	if !isAvailable {
+		return response.ConflictException(c, "Email already in use", "Please use a different email")
+	}
 	repo := repository.NewUserRepository()
 	userID, err := repo.CreateUser(context.Background(), &user)
 	if err != nil {
@@ -138,7 +146,6 @@ func RegisterNewUser(c *fiber.Ctx) error {
 		errorsArr := strings.Split(err.Error(), ";")
 		return response.ValidationException(c, "Invalid request", errorsArr)
 	}
-	credentialRepo := repository.NewCredentialRepository()
 	_, err = credentialRepo.CreateCredential(context.Background(), &credential)
 	if err != nil {
 		return response.InternalServerErrorException(c, "Failed to create user credential", err.Error())
