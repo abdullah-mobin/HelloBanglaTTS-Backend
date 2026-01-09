@@ -1,0 +1,383 @@
+basePath: /api/v1
+definitions:
+  dtos.CreateApiKeyDTO:
+    properties:
+      name:
+        type: string
+    type: object
+  dtos.CreateTicketDTO:
+    properties:
+      business_id:
+        type: string
+      category:
+        type: string
+      priority:
+        $ref: '#/definitions/models.TicketPriority'
+      status:
+        $ref: '#/definitions/models.TicketStatus'
+      subject:
+        type: string
+    type: object
+  dtos.LoginDTO:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  dtos.RefreshTokenDTO:
+    properties:
+      refresh_token:
+        type: string
+    type: object
+  dtos.RegisterDTO:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+    type: object
+  dtos.UpdateApiKeyDTO:
+    properties:
+      is_active:
+        type: boolean
+      name:
+        type: string
+    type: object
+  dtos.UpdateTicketDTO:
+    properties:
+      category:
+        type: string
+      priority:
+        $ref: '#/definitions/models.TicketPriority'
+      status:
+        $ref: '#/definitions/models.TicketStatus'
+      subject:
+        type: string
+    type: object
+  models.TicketPriority:
+    enum:
+    - high
+    - medium
+    - low
+    type: string
+    x-enum-varnames:
+    - TicketPriorityHigh
+    - TicketPriorityMedium
+    - TicketPriorityLow
+  models.TicketStatus:
+    enum:
+    - open
+    - pending
+    - close
+    type: string
+    x-enum-varnames:
+    - TicketStatusOpen
+    - TicketStatusPending
+    - TicketStatusClose
+host: localhost:5001
+info:
+  contact: {}
+  description: Hello Bangla TTS is a Bangla language based Ai platform writen in go.
+  title: HelloBanglaTTS-Backend-APIs
+  version: "1.0"
+paths:
+  /api-keys/:
+    get:
+      consumes:
+      - application/json
+      description: get all API keys by some filters{id,name,limit,beforeId,afterId}
+      parameters:
+      - description: Filter by id
+        in: query
+        name: id
+        type: string
+      - description: Filter by key
+        in: query
+        name: key
+        type: string
+      - description: Filter by beforeId
+        in: query
+        name: beforeId
+        type: string
+      - description: Filter by afterId
+        in: query
+        name: afterId
+        type: string
+      - description: Number of items per page (default 10)
+        in: query
+        name: limit
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - BearerAuth: []
+      summary: Get all API keys
+      tags:
+      - ApiKey
+  /api-keys/{key}:
+    put:
+      consumes:
+      - application/json
+      description: Update API key for a user
+      parameters:
+      - description: API key
+        in: path
+        name: key
+        required: true
+        type: string
+      - description: API Key payload
+        in: body
+        name: apiKey
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.UpdateApiKeyDTO'
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - BearerAuth: []
+      summary: Update API key
+      tags:
+      - ApiKey
+  /api-keys/new:
+    post:
+      consumes:
+      - application/json
+      description: Create a new API key for a user
+      parameters:
+      - description: API Key payload
+        in: body
+        name: apiKey
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.CreateApiKeyDTO'
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - BearerAuth: []
+      summary: Create a new API key
+      tags:
+      - ApiKey
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: login to user account
+      parameters:
+      - description: user login dto
+        in: body
+        name: login
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.LoginDTO'
+      produces:
+      - application/json
+      responses: {}
+      summary: Login to hello-bangla-tts
+      tags:
+      - Auth
+  /auth/logout:
+    post:
+      consumes:
+      - application/json
+      description: logout from user account
+      produces:
+      - application/json
+      responses: {}
+      summary: logout from hello-bangla-tts
+      tags:
+      - Auth
+  /auth/refresh:
+    post:
+      consumes:
+      - application/json
+      description: refresh users access token
+      parameters:
+      - description: user login dto
+        in: body
+        name: login
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.RefreshTokenDTO'
+      produces:
+      - application/json
+      responses: {}
+      summary: Refresh token
+      tags:
+      - Auth
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: create a new user account in sender-bee
+      parameters:
+      - description: user register dto
+        in: body
+        name: register
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.RegisterDTO'
+      produces:
+      - application/json
+      responses: {}
+      summary: Register new user
+      tags:
+      - Auth
+  /support/ticket:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve tickets filtered by business_id and other optional filters
+      parameters:
+      - description: Business ID
+        in: query
+        name: business_id
+        type: string
+      - description: Serial
+        in: query
+        name: serial
+        type: string
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      - description: beforeId
+        in: query
+        name: beforeId
+        type: string
+      - description: afterId
+        in: query
+        name: afterId
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - BearerAuth: []
+      summary: Get tickets
+      tags:
+      - Ticket
+  /support/ticket/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete ticket by ID
+      parameters:
+      - description: Ticket ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - BearerAuth: []
+      summary: Delete ticket
+      tags:
+      - Ticket
+    put:
+      consumes:
+      - application/json
+      description: Update ticket fields by ID
+      parameters:
+      - description: Ticket ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: ticket payload
+        in: body
+        name: ticket
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.UpdateTicketDTO'
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - BearerAuth: []
+      summary: Update ticket
+      tags:
+      - Ticket
+  /support/ticket/new:
+    post:
+      consumes:
+      - application/json
+      description: Create a ticket for a support
+      parameters:
+      - description: ticket payload
+        in: body
+        name: ticket
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.CreateTicketDTO'
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - BearerAuth: []
+      summary: Create Tickets
+      tags:
+      - Ticket
+  /user/:
+    get:
+      consumes:
+      - application/json
+      description: get all hello-bangla-tts users profile by some filters{id,name,limit,beforeId,afterId}
+      parameters:
+      - description: Filter by id
+        in: query
+        name: id
+        type: string
+      - description: Filter by name
+        in: query
+        name: name
+        type: string
+      - description: Filter by beforeId
+        in: query
+        name: beforeId
+        type: string
+      - description: Filter by afterId
+        in: query
+        name: afterId
+        type: string
+      - description: Number of items per page (default 10)
+        in: query
+        name: limit
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - BearerAuth: []
+      summary: Get all hello-bangla-tts users
+      tags:
+      - User
+  /user/profile:
+    get:
+      consumes:
+      - application/json
+      description: get a hello-bangla-tts users profile by id
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - BearerAuth: []
+      summary: Get Profile by id
+      tags:
+      - User
+schemes:
+- http
+- https
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
