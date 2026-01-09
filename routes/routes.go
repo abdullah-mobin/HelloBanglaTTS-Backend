@@ -10,7 +10,7 @@ func SetupRoutes(app *fiber.App) {
 	AuthRoutes(api.Group("/auth"))
 	UserRoutes(api.Group("/user"))
 	GenerateRoutes(api.Group("/generate"))
-	ApiKeyRoutes(api.Group("/api-keys"))
-	SupportRoutes(api.Group("/support"))
+	// ApiKeyRoutes(api.Group("/api-keys"))
+	// SupportRoutes(api.Group("/support"))
 
 }
