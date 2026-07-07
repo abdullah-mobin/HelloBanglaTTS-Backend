@@ -9,7 +9,8 @@ func GenerateRoutes(route fiber.Router) {
 
 	route.Post("/tts", handlers.GenerateTTS)
 	// route.Post("/video")
-	// route.Post("/image")
+	route.Post("/image", handlers.GenerateImage)
+	route.Post("/translate", handlers.TranslateBanglaPrompt)
 	// route.Post("/story")
 	// route.Post("/smartify")
 	// route.Post("/humanizer")

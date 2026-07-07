@@ -35,3 +35,6 @@ tmp
 # api documentation
 docs
 .DS_Store
+
+
+.puku/*
