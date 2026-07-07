@@ -11,7 +11,7 @@ func GenerateRoutes(route fiber.Router) {
 	// route.Post("/video")
 	route.Post("/image", handlers.GenerateImage)
 	route.Post("/translate", handlers.TranslateBanglaPrompt)
-	// route.Post("/story")
-	// route.Post("/smartify")
-	// route.Post("/humanizer")
+	route.Post("/story", handlers.GenerateStory)
+	route.Post("/humanizer", handlers.HumanizeBanglaTextHandler)
+	route.Post("/smartify", handlers.SmartifyBanglaTextHandler)
 }
